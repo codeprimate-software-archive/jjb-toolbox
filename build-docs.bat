@@ -1,0 +1,1 @@
+javadoc -use -version -author -windowtitle "JJB Toolbox API (JAF)" -d "docs/" *.java

@@ -1,0 +1,56 @@
+/**
+ * Copyright (c) 2002, Code Primate
+ * All Rights Reserved
+ *
+ * @author John J. Blum
+ * File: PieChartTest.java
+ * @version v1.0
+ * Date: 19 March 2002
+ * Modification Date: 19 March 2002
+ * @since Java 2
+ */
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import jjb.toolbox.awt.chart.DefaultPieChartModel;
+import jjb.toolbox.awt.chart.PieChart3D;
+import jjb.toolbox.awt.chart.PieChartModelIF;
+
+public class PieChartTest extends JFrame
+{
+
+  public PieChartTest()
+  {
+    super("Pie Chart by Code Primate");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    final PieChartModelIF model = new DefaultPieChartModel();
+
+    model.addSlice(120,"Dog",Color.red);
+    model.addSlice(220,"Cat",Color.blue);
+    model.addSlice(143,"Mouse",Color.orange);
+    model.addSlice(321,"Horse",Color.yellow);
+    model.addSlice(179,"Pig",Color.cyan);
+    model.addSlice(230,"Sheep",Color.magenta);
+
+    final JPanel border = new JPanel(new GridLayout(1,1));
+
+    border.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+    border.setBackground(Color.white);
+    border.add(new PieChart3D(model));
+    getContentPane().add(border,"Center");
+    setSize(new Dimension(400,200));
+    show();
+  }
+
+  public static void main(String[] args)
+  {
+    new PieChartTest();
+  }
+
+}
+

@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+
+<project name="JAF" default="help" basedir=".">
+
+  <!-- Filesystem Path Properties -->
+  <property name="build.dir" location="${basedir}/build"/>
+  <property name="dist.dir" location="${basedir}/dist"/>
+  <property name="lib.dir" location="${basedir}/lib"/>
+  <property name="src.dir" location="${basedir}/src"/>
+  <property name="test.src.dir" location="${basedir}/test/src"/>
+
+  <!-- Compiler Options -->
+  <property name="debug" value="off"/>
+  <property name="deprecation" value="on"/>
+  <property name="fork" value="yes"/>
+  <property name="optimize" value="true"/>
+  <property name="verbose" value="off"/>
+
+  <!-- Distribution JAR file name -->
+  <property name="jar.file" value="jaf.jar"/>
+
+  <!-- Defines the classpath used by the java compiler during the compilation of the java source files. -->
+  <path id="build.classpath">
+    <pathelement path="${build.dir}"/>
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar"/>
+      <include name="**/*.zip"/>
+    </fileset>
+  </path>
+
+  <!-- Runs all targets in the project. -->
+  <target name="all" depends="clean,build,test" description="Clean, build, and test project files."/>
+  
+  <target name="all.notest" depends="clean,build" description="Clean and build project files; does not run test."/>
+
+  <!-- Compiles all Java source and test files in the JAF project. -->
+  <target name="build" depends="compile.test,jar" description="Compiles all project source (src directory) and test (test/src directory) files and packages the contents into a JAR file."/>
+
+  <!-- Cleans all binary directories. -->
+  <target name="clean" description="Removes the build and dist directories and their contents.">
+    <echo level="info"> Removing build directory... </echo>
+    <delete dir="${build.dir}" failonerror="false"/>
+    <echo level="info"> Removing dist directory... </echo>
+    <delete dir="${dist.dir}" failonerror="false"/>
+  </target>
+
+  <!-- Compile all Java files in the JAF project. -->
+  <target name="compile" depends="compile.test" description="Synonym for the compile.test target."/>
+
+  <!-- Compiles all Java source files in the JAF project. -->
+  <target name="compile.src" depends="make.dir" description="Compiles all Java source classes in the jjb.toolbox and org.java packages.">
+    <javac srcdir="${src.dir}"
+           optimize="${optimize}" 
+           debug="${debug}"
+           destdir="${build.dir}"
+           verbose="${verbose}"
+           deprecation="${deprecation}"
+           fork="${fork}">
+			<classpath refid="build.classpath"/>
+    </javac>
+			<!--<excludesFile name="${basedir}/base-excludes"/>-->
+  </target>
+
+  <!-- Compiles all Java test files in the JAF project. -->
+  <target name="compile.test" depends="compile.src" description="Compiles all Java test classes in the test directory for the jjb.toolbox and org.java packages.">
+    <javac srcdir="${test.src.dir}"
+           optimize="${optimize}" 
+           debug="${debug}"
+           destdir="${build.dir}"
+           verbose="${verbose}"
+           deprecation="${deprecation}"
+           fork="${fork}">
+			<classpath refid="build.classpath"/>
+    </javac>
+  </target>
+
+  <target name="info" description="Information">
+    <echo level="info" message="See help."/>
+  </target>
+
+  <!-- Packages all class files in the build directory into a JAR file in the dist directory. -->
+  <target name="jar" description="Packages all the class files of the build directory into a JAR file placed in the dist directory.">
+    <delete file="${dist.dir}/${jar.file}"/>
+    <jar jarfile="${dist.dir}/${jar.file}"
+			   basedir="${build.dir}"/>
+  </target>
+
+  <target name="make" depends="all" description="Synonym for the all target."/>
+  
+  <!-- Makes the build and dist directories under the proejct base directory. -->
+  <target name="make.dir" description="Creates the build and dist directories.">
+    <echo level="info"> Creating build directory... </echo>
+    <mkdir dir="${build.dir}"/>
+    <echo level="info"> Creating dist directory... </echo>
+    <mkdir dir="${dist.dir}"/>
+  </target>
+
+  <target name="test" description="Runs all junit test on the classes from the jjb.toolbox and org.java packages."/>
+  
+  <!-- Displays help information to the user. -->
+  <target name="help" description="Displays context-sensitive help for this build file.">
+    <echo level="info" message=""/>
+    <echo level="info" message="ANT build.xml file for the Java Application Framework (JAF) libarary."/>
+    <echo level="info" message=""/>
+    <echo level="info" message="The following targets are avaiable to execute: "/>
+    <echo level="info" message=""/>
+    <echo level="info"> all           runs the clean, build and test targets. </echo>
+    <echo level="info"> all.notest    runs the clean and build targets, but no test. </echo>
+    <echo level="info"> build         runs the compile.test and jar targets. </echo>
+    <echo level="info"> clean         removes the contents of the build and dist directories. </echo>
+    <echo level="info"> compile       alias to execute the compile.test target. </echo>
+    <echo level="info"> compile.src   compiles Java source classes in the jjb.toolbox and org.java packages. </echo>
+    <echo level="info"> compile.test  compiles Java test classes for classes in the jjb.toolbox and org.java packages. </echo>
+    <echo level="info"> jar           packages all classes in the jjb.toolbox and org.java package into the JAF JAR file </echo>
+    <echo level="info">               in the dist directory. </echo>
+    <echo level="info"> make          alias to execute the all target. </echo>                 
+    <echo level="info"> test          runs all JUnit tests for classes in the JAF library. </echo>
+    <echo level="info"> help          displays help information. </echo>
+  </target>
+
+</project>
